@@ -38,6 +38,8 @@ class MadMailer {
 		$this->debug = $debug;
 		$this->print_tx_id = $print_tx_id;
 		$this->mailer_url = "https://madmimi.com/mailer";
+		$this->new_lists_url = "http://madmimi.com/audience_lists";
+		$this->audience_members_url = "http://madmimi.com/audience_members";
 		$this->lists_url = "http://madmimi.com/audience_lists/lists.xml?username=%username%&api_key=%api_key%";
 		$this->memberships_url = "http://madmimi.com/audience_members/%email%/lists.xml?username=%username%&api_key=%api_key%";
 	}
@@ -46,7 +48,7 @@ class MadMailer {
 		curl_setopt($ch, CURLOPT_URL, $url);
 		if ($method == 'POST' && $post_arr != null) {
 			curl_setopt($ch, CURLOPT_POST, TRUE);
-			if ($mail = false) {
+			if ($mail == false) {
 				curl_setopt($ch, CURLOPT_POSTFIELDS, $this->build_postfields($post_arr));
 			} else {
 				curl_setopt($ch, CURLOPT_POSTFIELDS, $this->build_request($post_arr['recipient'], $post_arr['message'], $post_arr['body']));
@@ -113,6 +115,16 @@ class MadMailer {
 			return $request_string;
 		}
 	}
+	function build_csv($user, $list = null) {
+		if ($list != null) {
+			$csv = "name,email,list\n";
+			$csv .= $user['Name'] . "," . $user['Email'] . "," . (int)$list . "\n";
+		} else {
+			$csv = "name,email\n";
+			$csv .= $user['Name'] . "," . $user['Email'] . "\n";
+		}
+		return $csv;
+	}
 	function Lists() {
 		$url = $this->prepare_url($this->lists_url);
 		$result = $this->DoRequest($url, 'GET', true);
@@ -124,6 +136,16 @@ class MadMailer {
 		$result = $this->DoRequest($url, 'GET', true);
 		$lists = new SimpleXMLElement($result);
 		return $lists;
+	}
+	function NewList($list_name) {
+		$arr = array('name' => $list_name);
+		$result = $this->DoRequest($this->new_lists_url, 'POST', true, false, $arr);
+		return $result;
+	}
+	function AddUser($user, $list = null) {
+		$csv = $this->build_csv($user);
+		$arr = array('csv_file' => $csv);
+		$this->DoRequest($this->audience_members_url, 'POST', false, false, $arr);
 	}
 	function SendMessage($recipient_array, $message_array, $body_array) {
 		$arr = array();
