@@ -1,5 +1,6 @@
 <?php
-$mailer = new MadMailer('LOGIN EMAIL ADDRESS (USERNAME)', 'API-KEY');
+require('MadMailer.class.php');
+$mailer = new MadMailer('YOUR USERNAME (OR E-MAIL ADDRESS)', 'YOUR API KEY');
 
 // Get all lists for this account..
 $lists = $mailer->Lists();
@@ -10,14 +11,13 @@ foreach ($lists as $list) {
 }
 
 // Now, let's check a user's membership status...
-$memberships = $mailer->Memberships('test@example.net');
+$memberships = $mailer->Memberships('noreply@example.com');
 foreach ($memberships as $list) {
 	echo $list['name'] . "<br />";
 }
 
 // Maybe we just want to send a message?
-
-$recipient = array('Name' => 'Nicholas Young', 'Email' => 'nicholas@nicholaswyoung.com');
+$recipient = array('Name' => 'Nicholas Young', 'Email' => 'rockandroll@example.com');
 $message = array('PromoName' => 'My Awesome Promotion', 'Subject' => 'You Gotta Read This', 'FromAddr' => 'noreply@example.com');
 $body = array('Greeting' => 'Hello From MadMailer!');
 $mailer->SendMessage($recipient, $message, $body);
