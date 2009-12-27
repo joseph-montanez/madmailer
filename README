@@ -1,0 +1,44 @@
+/*
+	MadMailer => a short, sweet PHP class for the MadMimi Mailer API.
+	"Taking the pain out of creating cURL requests in PHP since 2009."
+	(Many thanks to Dave, Gary, and the rest of the MadMimi crew for creating such an awesome API!)
+	
+	Released under the MIT License
+	_______________________________________
+	
+	Release notes:
+	November 12, 2009: general release - only basic functions are provided.
+	
+	A quick tutorial:
+	
+	require('MadMailer.class.php');		// ALWAYS MAKE SURE TO REQUIRE THE CLASS.
+	
+	$recipient = array(	'Name' => 'Nicholas Young',
+						'Email' => 'nicholas@nicholaswyoung.com');		// SET UP YOUR RECIPIENT ARRAY
+
+	$message = array(	'Subject' => 'This is the subject',
+						'PromoName' => 'My Awesome Promotion',
+						'FromAddr' => 'noreply@mydomain.com');		// SET UP YOUR MESSAGE ARRAY
+
+	$body = array(	'FIRSTNAME' => $recipient['Name'],			// SET UP YOUR BODY ARRAY - (The key is your YAML key)
+					'GREETING' => 'Hello from MadMailer');
+					
+
+			
+	$mailer = new MadMailer('YOUR MADMIMI LOGIN EMAIL ADDRESS', 'YOUR API KEY', false, false);		// FIRE UP THE MAILER
+	
+	// NOTE: THE LAST TWO PARAMETERS ARE OPTIONAL.
+			 The first is a debugger, when set to true, you'll get a print out of the mailer request string sent back to you.
+			 The second allows you to print out the transaction id that MadMimi returns (if set to true)
+	
+	$mailer->SendMessage($recipient, $message, $body);		// SEND THE MESSAGE!
+	
+	That's it. Easy enough?
+
+        THE ROADMAP (i.e. features I want to add):
+        => Multiple recipients
+        => All functions of the regular API too
+
+
+
+*/
