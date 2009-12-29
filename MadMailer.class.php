@@ -95,7 +95,7 @@ class MadMailer {
 	}
 	function construct_body($body_data) {
 		foreach ($body_data as $key => $value) {
-			$body_string .= $key . ': ' . $value . "\n";
+			$body_string .= $key . ': ' . urlencode($value) . "\n";
 		}
 		return $body_string;
 	}
