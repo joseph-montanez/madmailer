@@ -88,7 +88,7 @@ class MadMailer {
 	function build_postfields($arr) {
 		$post_string = "username=$this->username&api_key=$this->api_key&";
 		foreach($arr as $key => $value) {
-			$post_string .= "" . $key . "=" . $value . "&";
+			$post_string .= "" . $key . "=" . urlencode($value) . "&";
 		}
 		$post_string = substr($post_string, 0, -1);
 		return $post_string;
@@ -142,10 +142,18 @@ class MadMailer {
 		$result = $this->DoRequest($this->new_lists_url, 'POST', true, false, $arr);
 		return $result;
 	}
-	function AddUser($user, $list = null) {
+	function DeleteList($list_name) {
+		$arr = array('_method' => 'delete');
+		$result = $this->DoRequest($this->new_lists_url . "/" . rawurlencode($list_name), 'POST', true, false, $arr);
+	}
+	function AddUser($user, $list_name = null) {
 		$csv = $this->build_csv($user);
-		$arr = array('csv_file' => $csv);
-		$this->DoRequest($this->audience_members_url, 'POST', false, false, $arr);
+		$arr = array('username' => $this->username, 'api_key' => $this->api_key, 'email' => $user['email']);
+		$this->DoRequest($this->new_lists_url . "/" . rawurlencode($list_name) . "/add", 'POST', false, false, $arr);
+	}
+	function RemoveUser($user, $list_name) {
+		$arr = array('username' => $this->username, 'api_key' => $this->api_key, 'email' => $user['email']);
+		$this->DoRequest($this->new_lists_url . "/" . rawurlencode($list_name) . "/remove", 'POST', false, false, $arr);
 	}
 	function SendMessage($recipient_array, $message_array, $body_array) {
 		$arr = array();
