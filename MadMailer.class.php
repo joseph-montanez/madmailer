@@ -108,7 +108,7 @@ class MadMailer {
 		$request_string .= "&subject=" . $message_arr['Subject'];
 		$request_string .= "&from=" . $message_arr['FromAddr'];
 		if ($body_arr['raw_html']) {
-			$request_string .= "&raw_html=" . $body_arr['raw_html'];
+			$request_string .= "&raw_html=" . urlencode($body_arr['raw_html']);
 		} else {
 			$request_string .= "&body=--- " . $this->construct_body($body_arr);
 		}
