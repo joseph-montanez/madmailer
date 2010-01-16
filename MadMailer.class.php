@@ -107,7 +107,11 @@ class MadMailer {
 		$request_string .= " <" . $recipient_arr['Email'] . ">";
 		$request_string .= "&subject=" . $message_arr['Subject'];
 		$request_string .= "&from=" . $message_arr['FromAddr'];
-		$request_string .= "&body=--- " . $this->construct_body($body_arr);
+		if ($body_arr['raw_html']) {
+			$request_string .= "&raw_html=" . $body_arr['raw_html'];
+		} else {
+			$request_string .= "&body=--- " . $this->construct_body($body_arr);
+		}
 		if ($this->debug == true) {
 			header("Content-type: text");
 			print $request_string;
