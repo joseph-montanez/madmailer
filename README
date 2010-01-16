@@ -11,12 +11,11 @@
 	December 27, 2009: Cleaned up the cURL requests, and added methods for Lists and Memberships.
 	
 	See /Examples/The_Basics.php for a brief tutorial.
+        For more in-depth usage, just look around inside the Examples directory. There's several.
 	
 	That's it. Easy enough?
 
 	THE ROADMAP (i.e. features I want to add):
 	=> Multiple recipients
 	
-	KNOWN BUGS:
-	Cannot add a user to a specific list, only to the main "audience" group. (This will be fixed asap.)
 */
