@@ -44,6 +44,7 @@ class MadMailer {
 		$this->memberships_url = "http://madmimi.com/audience_members/%email%/lists.xml?username=%username%&api_key=%api_key%";
 	}
 	function DoRequest($url, $method = 'GET', $return = false, $mail = false, $post_arr = null) {
+		ob_start();
 		$ch = curl_init();
 		curl_setopt($ch, CURLOPT_URL, $url);
 		if ($method == 'POST' && $post_arr != null) {
@@ -76,6 +77,7 @@ class MadMailer {
 				return $result;
 			}
 		}
+		ob_flush();
 	}
 	function prepare_url($url, $email = null) {
 		$url = str_replace('%username%', $this->username, $url);
