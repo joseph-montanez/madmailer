@@ -161,6 +161,10 @@ class MadMailer {
 		$arr = array('username' => $this->username, 'api_key' => $this->api_key, 'email' => $user['email']);
 		$this->DoRequest($this->new_lists_url . "/" . rawurlencode($list_name) . "/remove", 'POST', false, false, $arr);
 	}
+	function Import($csv_data) {
+		$arr = array('username' => $this->username, 'api_key' => $this->api_key, 'csv_file' => $csv_data);
+		$this->DoRequest($this->audience_members_url, 'POST', false, false, $arr);
+	}
 	function SendMessage($recipient_array, $message_array, $body_array) {
 		$arr = array();
 		$arr['recipient'] = $recipient_array;
