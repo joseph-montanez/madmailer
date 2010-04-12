@@ -10,7 +10,7 @@ $mailer = new MadMailer('YOUR USERNAME (OR E-MAIL ADDRESS)', 'YOUR API KEY');
 // Note, in this user's array, we have a bunch of custom fields, and an add_list key - that lets us
 // add this user to a specific list! If the user is already a member of your audience, just give it the
 // email and add_list keys, and you're good to go.
-$user = array('email' => 'podcast@originalmachine.com', 'firstName' => 'nicholas', 'lastName' => 'young', 'add_list' => 'Test List 2');
+$user = array('email' => 'emailaddress@example.com', 'firstName' => 'nicholas', 'lastName' => 'young', 'add_list' => 'Test List 2');
 
 $mailer->AddUser($user);
 ?>
