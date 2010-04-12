@@ -121,14 +121,19 @@ class MadMailer {
 			return $request_string;
 		}
 	}
-	function build_csv($user, $list = null) {
-		if ($list != null) {
-			$csv = "name,email,list\n";
-			$csv .= $user['Name'] . "," . $user['Email'] . "," . (int)$list . "\n";
-		} else {
-			$csv = "name,email\n";
-			$csv .= $user['Name'] . "," . $user['Email'] . "\n";
+	function build_csv($arr) {
+		$csv = "";
+		$keys = array_keys($arr);
+		foreach ($keys as $key => $value) {
+			$csv .= $value . ",";
 		}
+		$csv = substr($csv, 0, -1);
+		$csv .= "\n";
+		foreach ($arr as $key => $value) {
+			$csv .= $value . ",";
+		}
+		$csv = substr($csv, 0, -1);
+		$csv .= "\n";
 		return $csv;
 	}
 	function Lists() {
@@ -152,18 +157,18 @@ class MadMailer {
 		$arr = array('_method' => 'delete');
 		$result = $this->DoRequest($this->new_lists_url . "/" . rawurlencode($list_name), 'POST', true, false, $arr);
 	}
-	function AddUser($user, $list_name = null) {
+	function AddUser($user) {
 		$csv = $this->build_csv($user);
-		$arr = array('username' => $this->username, 'api_key' => $this->api_key, 'email' => $user['email']);
-		$this->DoRequest($this->new_lists_url . "/" . rawurlencode($list_name) . "/add", 'POST', false, false, $arr);
+		$arr = array('username' => $this->username, 'api_key' => $this->api_key, 'csv_file' => $csv);
+		$this->DoRequest($this->audience_members_url, 'POST', true, false, $arr);
 	}
-	function RemoveUser($user, $list_name) {
-		$arr = array('username' => $this->username, 'api_key' => $this->api_key, 'email' => $user['email']);
+	function RemoveUser($email, $list_name) {
+		$arr = array('username' => $this->username, 'api_key' => $this->api_key, 'email' => $email);
 		$this->DoRequest($this->new_lists_url . "/" . rawurlencode($list_name) . "/remove", 'POST', false, false, $arr);
 	}
 	function Import($csv_data) {
 		$arr = array('username' => $this->username, 'api_key' => $this->api_key, 'csv_file' => $csv_data);
-		$this->DoRequest($this->audience_members_url, 'POST', false, false, $arr);
+		$this->DoRequest($this->audience_members_url, 'POST', true, false, $arr);
 	}
 	function SendMessage($recipient_array, $message_array, $body_array) {
 		$arr = array();
