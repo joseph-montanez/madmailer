@@ -9,6 +9,7 @@
 	Release notes:
 	November 12, 2009: General release - only basic functions are provided.
 	December 27, 2009: Cleaned up the cURL requests, and added methods for Lists and Memberships.
+	April 12, 2010:	   Revamped the AddUser function. Now with custom fields!
 	
 	See /Examples/The_Basics.php for a brief tutorial.
         For more in-depth usage, just look around inside the Examples directory. There's several.
