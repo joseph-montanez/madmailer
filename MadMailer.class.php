@@ -109,6 +109,9 @@ class MadMailer {
 		$request_string .= " <" . $recipient_arr['Email'] . ">";
 		$request_string .= "&subject=" . $message_arr['Subject'];
 		$request_string .= "&from=" . $message_arr['FromAddr'];
+		if ($message_arr['unconfirmed']) {
+			$request_string .= "&unconfirmed=true"; // requires advanced api
+		}
 		if ($body_arr['raw_html']) {
 			$request_string .= "&raw_html=" . urlencode($body_arr['raw_html']);
 		} else {
