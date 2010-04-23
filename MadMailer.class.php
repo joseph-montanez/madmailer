@@ -190,5 +190,9 @@ class MadMailer {
 		$arr['body'] = $body_array;
 		$this->DoRequest($this->mailer_url, 'POST', false, true, $arr);
 	}
+	function SendToList($list_name, $promotion_name) {
+		$arr = array('list_name' => $list_name, 'promotion_name' => $promotion_name, 'api_key' => $this->api_key, 'username' => $this->username);
+		$this->DoRequest("https://madmimi.com/mailer/to_list", 'POST', false, false, $arr);
+	}
 }
 ?>
