@@ -118,7 +118,12 @@ class MadMailer {
 			$request_string .= "&unconfirmed=true"; // requires advanced api
 		}
 		if ($body_arr['raw_html']) {
-			$request_string .= "&raw_html=" . urlencode($body_arr['raw_html']);
+			if (strstr($body_arr['raw_html'], '[[tracking_beacon]]') || strstr($body_arr['raw_html'], '[[peek_image]]')) {
+				$request_string .= "&raw_html=" . urlencode($body_arr['raw_html']);
+			} else {
+				die ("You're trying to use raw_html, but don't have either the [[tracking_beacon]] or the [[peek_image]] in your
+					 HTML. Please pick one, and include it.");
+			}
 		} else {
 			$request_string .= "&body=--- " . $this->construct_body($body_arr);
 		}
