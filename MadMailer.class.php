@@ -97,6 +97,7 @@ class MadMailer {
 	}
 	function construct_body($body_data) {
 		foreach ($body_data as $key => $value) {
+			$key = str_replace(' ', '_', $key);
 			if (strstr($value, 'http')) {
 				$body_string .= $key . ': ' . $value . "\n";
 			} else {
