@@ -10,6 +10,7 @@
 	November 12, 2009: General release - only basic functions are provided.
 	December 27, 2009: Cleaned up the cURL requests, and added methods for Lists and Memberships.
 	April 12, 2010:	   Revamped the AddUser function. Now with custom fields!
+	April 23, 2010:    NOTE: As of commit (b5d2f3a7ca65d3b0afa48b40e4e0bb0f42e789e2) spaces in body array keys are automatically converted to underscores. More info here: http://github.com/nicholaswyoung/madmailer/commit/b5d2f3a7ca65d3b0afa48b40e4e0bb0f42e789e2
 	
 	See /Examples/The_Basics.php for a brief tutorial.
         For more in-depth usage, just look around inside the Examples directory. There's several.
