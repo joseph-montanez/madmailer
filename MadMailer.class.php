@@ -1,16 +1,13 @@
 <?php
 /*
 	MadMailer => a short, sweet PHP class for the MadMimi API.
-	"Mailing list management made easy."
-	(Many thanks to Dave, Gary, and the rest of the MadMimi crew for creating such an awesome API!)
+	v2.0 - Cleaner, faster, and much easier to use and extend. (In my opinion!)
 	
 	For release notes, see the README that should have been included.
 	
 	_______________________________________
-	
-	The MIT License
 
-	Copyright (c) 2009 Nicholas Young
+	Copyright (c) 2010 Nicholas Young
 
 	Permission is hereby granted, free of charge, to any person obtaining a copy
 	of this software and associated documentation files (the "Software"), to deal
@@ -32,107 +29,72 @@
 */
 
 class MadMailer {
-	function __construct($username, $api_key, $debug = false, $print_tx_id = false) {
-		$this->username = $username;
+	function __construct($email, $api_key, $debug = false) {
+		$this->username = $email;
 		$this->api_key = $api_key;
 		$this->debug = $debug;
-		$this->print_tx_id = $print_tx_id;
-		$this->mailer_url = "https://madmimi.com/mailer";
-		$this->new_lists_url = "http://madmimi.com/audience_lists";
-		$this->audience_members_url = "http://madmimi.com/audience_members";
-		$this->lists_url = "http://madmimi.com/audience_lists/lists.xml?username=%username%&api_key=%api_key%";
-		$this->memberships_url = "http://madmimi.com/audience_members/%email%/lists.xml?username=%username%&api_key=%api_key%";
 	}
-	function DoRequest($url, $method = 'GET', $return = false, $mail = false, $post_arr = null) {
+	function default_options() {
+		return array('username' => $this->username, 'api_key' => $this->api_key);
+	}
+	function DoRequest($path, $options, $return_status = false, $method = 'GET', $mail = false) {
+		$url = "";
+		$request_options = $this->build_request_string($options);
+		if ($mail == false) {
+			$url .= "http://madmimi.com{$path}";
+		} else {
+			$url .= "https://madmimi.com{$path}";
+		}
+		if ($method == 'GET') {
+			$url .= $request_options;
+		}
 		ob_start();
 		$ch = curl_init();
 		curl_setopt($ch, CURLOPT_URL, $url);
-		if ($method == 'POST' && $post_arr != null) {
-			curl_setopt($ch, CURLOPT_POST, TRUE);
-			if ($mail == false) {
-				curl_setopt($ch, CURLOPT_POSTFIELDS, $this->build_postfields($post_arr));
-			} else {
-				curl_setopt($ch, CURLOPT_POSTFIELDS, $this->build_request($post_arr['recipient'], $post_arr['message'], $post_arr['body']));
-				curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, FALSE);
-				curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, FALSE);
-			}
+		switch($method) {
+			case 'GET':
+				break;
+			case 'POST':
+				curl_setopt($ch, CURLOPT_POST, TRUE);
+				curl_setopt($ch, CURLOPT_POSTFIELDS, $request_options);
+				if (strstr($url, 'https')) {
+					curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, FALSE);
+					curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, FALSE);
+				}
+				break;
 		}
-		if ($this->print_tx_id == false) {
-			curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+		if ($this->debug == true) {
+			echo "URL: {$url}<br />";
+			if ($method == 'POST') {
+				echo "Request Options: {$request_options}";
+			}
 		} else {
-			curl_setopt($ch, CURLOPT_RETURNTRANSFER, 0);
-		}
-		if ($this->debug == false) {
 			$result = curl_exec($ch) or die(curl_error($ch));
-			if (!$result) {
-				print "Error: " . $result;
-			}
 		}
 		curl_close($ch);
-		if ($return == true) {
+		ob_flush();
+		if ($return_status == true && $this->debug == false) {
 			return $result;
 		}
-		if ($method == 'POST' && $post_arr != null && $mail == true) {
-			if ($this->print_tx_id == true) {
-				return $result;
-			}
-		}
-		ob_flush();
 	}
-	function prepare_url($url, $email = null) {
-		$url = str_replace('%username%', $this->username, $url);
-		$url = str_replace('%api_key%', $this->api_key, $url);
-		if ($email != null) {
-			$url = str_replace('%email%', $email, $url);
-		}
-		return $url;
-	}
-	function build_postfields($arr) {
-		$post_string = "username=$this->username&api_key=$this->api_key&";
+	function build_request_string($arr) {
 		foreach($arr as $key => $value) {
 			$post_string .= "" . $key . "=" . urlencode($value) . "&";
 		}
 		$post_string = substr($post_string, 0, -1);
 		return $post_string;
 	}
-	function construct_body($body_data) {
-		foreach ($body_data as $key => $value) {
+	function to_yaml($arr) {
+		$yaml_str = "";
+		foreach ($arr as $key => $value) {
 			$key = str_replace(' ', '_', $key);
 			if (strstr($value, 'http')) {
-				$body_string .= $key . ': ' . $value . "\n";
+				$yaml_str .= $key . ': ' . $value . "\n";
 			} else {
-				$body_string .= $key . ': ' . urlencode($value) . "\n";
+				$yaml_str .= $key . ': ' . urlencode($value) . "\n";
 			}
 		}
-		return $body_string;
-	}
-	function build_request($recipient_arr, $message_arr, $body_arr) {
-		$request_string = "username=$this->username";
-		$request_string .= "&api_key=$this->api_key";
-		$request_string .= "&promotion_name=" . $message_arr['PromoName'];
-		$request_string .= "&recipients=" . $recipient_arr['Name'];
-		$request_string .= " <" . $recipient_arr['Email'] . ">";
-		$request_string .= "&subject=" . $message_arr['Subject'];
-		$request_string .= "&from=" . $message_arr['FromAddr'];
-		if ($message_arr['unconfirmed']) {
-			$request_string .= "&unconfirmed=true"; // requires advanced api
-		}
-		if ($body_arr['raw_html']) {
-			if (strstr($body_arr['raw_html'], '[[tracking_beacon]]') || strstr($body_arr['raw_html'], '[[peek_image]]')) {
-				$request_string .= "&raw_html=" . urlencode($body_arr['raw_html']);
-			} else {
-				die ("You're trying to use raw_html, but don't have either the [[tracking_beacon]] or the [[peek_image]] in your
-					 HTML. Please pick one, and include it.");
-			}
-		} else {
-			$request_string .= "&body=--- " . $this->construct_body($body_arr);
-		}
-		if ($this->debug == true) {
-			header("Content-type: text");
-			print $request_string;
-		} else {
-			return $request_string;
-		}
+		return $yaml_str;
 	}
 	function build_csv($arr) {
 		$csv = "";
@@ -149,50 +111,55 @@ class MadMailer {
 		$csv .= "\n";
 		return $csv;
 	}
-	function Lists() {
-		$url = $this->prepare_url($this->lists_url);
-		$result = $this->DoRequest($url, 'GET', true);
-		$lists = new SimpleXMLElement($result);
-		return $lists;
+	function Import($csv_data, $return = false) {
+		$options = array('csv_file' => $csv_data) + $this->default_options();
+		$request = $this->DoRequest('/audience_members', $options, $return, 'POST');
+		return $request;
 	}
-	function Memberships($email) {
-		$url = $this->prepare_url($this->memberships_url, $email);
-		$result = $this->DoRequest($url, 'GET', true);
-		$lists = new SimpleXMLElement($result);
-		return $lists;
+	function Lists($return = false) {
+		$request = $this->DoRequest('/audience_lists/lists.xml', $this->default_options(), $return);
+		return $request;
 	}
-	function NewList($list_name) {
-		$arr = array('name' => $list_name);
-		$result = $this->DoRequest($this->new_lists_url, 'POST', true, false, $arr);
-		return $result;
-	}
-	function DeleteList($list_name) {
-		$arr = array('_method' => 'delete');
-		$result = $this->DoRequest($this->new_lists_url . "/" . rawurlencode($list_name), 'POST', true, false, $arr);
-	}
-	function AddUser($user) {
+	function AddUser($user, $return = false) {
 		$csv = $this->build_csv($user);
-		$arr = array('username' => $this->username, 'api_key' => $this->api_key, 'csv_file' => $csv);
-		$this->DoRequest($this->audience_members_url, 'POST', true, false, $arr);
+		$this->Import($csv, $return);
 	}
-	function RemoveUser($email, $list_name) {
-		$arr = array('username' => $this->username, 'api_key' => $this->api_key, 'email' => $email);
-		$this->DoRequest($this->new_lists_url . "/" . rawurlencode($list_name) . "/remove", 'POST', false, false, $arr);
+	function RemoveUser($email, $list_name, $return = false) {
+		$options = array('email' => $email) + $this->default_options();
+		$request = $this->DoRequest('/audience_lists/' . rawurlencode($list_name) . "/remove", $options, $return, 'POST');
+		return $request;
 	}
-	function Import($csv_data) {
-		$arr = array('username' => $this->username, 'api_key' => $this->api_key, 'csv_file' => $csv_data);
-		$this->DoRequest($this->audience_members_url, 'POST', true, false, $arr);
+	function Memberships($email, $return = false) {
+		$url = str_replace('%email%', $email, '/audience_members/%email%/lists.xml?');
+		$request = $this->DoRequest($url, $this->default_options(), $return);
+		return $request;
 	}
-	function SendMessage($recipient_array, $message_array, $body_array) {
-		$arr = array();
-		$arr['recipient'] = $recipient_array;
-		$arr['message'] = $message_array;
-		$arr['body'] = $body_array;
-		$this->DoRequest($this->mailer_url, 'POST', false, true, $arr);
+	function NewList($list_name, $return = false) {
+		$options = array('name' => $list_name) + $this->default_options();
+		$request = $this->DoRequest('/audience_lists', $options, $return, 'POST');
+		return $request;
 	}
-	function SendToList($list_name, $promotion_name) {
-		$arr = array('list_name' => $list_name, 'promotion_name' => $promotion_name, 'api_key' => $this->api_key, 'username' => $this->username);
-		$this->DoRequest("https://madmimi.com/mailer/to_list", 'POST', false, false, $arr);
+	function DeleteList($list_name, $return = false) {
+		$options = array('_method' => 'delete') + $this->default_options();
+		$request = $this->DoRequest('/audience_lists/' . rawurlencode($list_name), $options, $return, 'POST');
+		return $request;
+	}
+	function SendMessage($options, $yaml_body, $return = false) {
+		$yaml = "--- " . $this->to_yaml($yaml_body);
+		$options = $options + $this->default_options();
+		$options['body'] = $yaml;
+		$request = $this->DoRequest('/mailer', $options, $return, 'POST', true);
+	}
+	function SendHTML($options, $html, $return = false) {
+		$options = $options + $this->default_options();
+		$options['raw_html'] = $html;
+		$request = $this->DoRequest('/mailer', $options, $return, 'POST', true);
+		return $request;
+	}
+	function SendPlainText($options, $message, $return = false) {
+		$options = $options + $this->default_options();
+		$options['raw_plain_text'] = $message;
+		$request = $this->DoRequest('/mailer', $options, $return, 'POST', true);
 	}
 }
 ?>
