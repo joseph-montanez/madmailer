@@ -181,7 +181,7 @@ class MadMailer {
 	}
 	function Search($query_string, $raw = false, $return = false) {
 		$options = array('query' => $query_string, 'raw' => $raw) + $this->default_options();
-		$request = $this->DoRequest('/audience_members/search.xml?', $options, $return);
+		$request = $this->DoRequest('/audience_members/search.xml', $options, $return);
 		return $request;
 	}
 }
