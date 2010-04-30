@@ -91,7 +91,11 @@ class MadMailer {
 			if (strstr($value, 'http')) {
 				$yaml_str .= $key . ': ' . $value . "\n";
 			} else {
-				$yaml_str .= $key . ': ' . urlencode($value) . "\n";
+				if (strstr($value, ':')) {
+					$yaml_str .= $key . ': "' . urlencode($value) . '"' . "\n";
+				} else {
+					$yaml_str .= $key . ': ' . urlencode($value) . "\n";
+				}
 			}
 		}
 		return $yaml_str;
