@@ -163,6 +163,11 @@ class MadMailer {
 	}
 	function SuppressedSince($unix_timestamp, $return = false) {
 		$request = $this->DoRequest('/audience_members/suppressed_since/' . $unix_timestamp . '.txt?', $this->default_options(), $return);
+		return $request;
+	}
+	function Promotions($return = false) {
+		$request = $this->DoRequest('/promotions.xml?', $this->default_options(), $return);
+		return $request;
 	}
 }
 ?>
