@@ -161,5 +161,8 @@ class MadMailer {
 		$options['raw_plain_text'] = $message;
 		$request = $this->DoRequest('/mailer', $options, $return, 'POST', true);
 	}
+	function SuppressedSince($unix_timestamp, $return = false) {
+		$request = $this->DoRequest('/audience_members/suppressed_since/' . $unix_timestamp . '.txt?', $this->default_options(), $return);
+	}
 }
 ?>
