@@ -169,5 +169,11 @@ class MadMailer {
 		$request = $this->DoRequest('/promotions.xml?', $this->default_options(), $return);
 		return $request;
 	}
+	function MailingStats($promotion_id, $mailing_id, $return = false) {
+		$url = str_replace("%promotion_id%", $promotion_id, "/promotions/%promotion_id%/mailings/%mailing_id%.xml?");
+		$url = str_replace("%mailing_id%", $mailing_id, $url);
+		$request = $this->DoRequest($url, $this->default_options(), $return);
+		return $request;
+	}
 }
 ?>
