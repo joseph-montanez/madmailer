@@ -184,5 +184,11 @@ class MadMailer {
 		$request = $this->DoRequest('/audience_members/search.xml', $options, $return);
 		return $request;
 	}
+	function SendWithExternalYAML($options, $yaml_body, $return = false) {
+		$options = $options + $this->default_options();
+		$options['body'] = $yaml_body;
+		$request = $this->DoRequest('/mailer', $options, $return, 'POST', true);
+		return $request;
+	}
 }
 ?>
