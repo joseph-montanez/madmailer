@@ -145,12 +145,18 @@ class MadMailer {
 		$request = $this->DoRequest('/mailer', $options, $return, 'POST', true);
 	}
 	function SendHTML($options, $html, $return = false) {
+		if ((!strstr($html, '[[tracking_beacon]]')) || (!strstr($html, '[[peek_image]]'))) {
+			die('Please include either the [[tracking_beacon]] or the [[peek_image]] macro in your HTML.')
+		}
 		$options = $options + $this->default_options();
 		$options['raw_html'] = $html;
 		$request = $this->DoRequest('/mailer', $options, $return, 'POST', true);
 		return $request;
 	}
 	function SendPlainText($options, $message, $return = false) {
+		if (!strstr($message, '[[unsubscribe]]')) {
+			die('Please include the [[unsubscribe]] macro in your text.');
+		}
 		$options = $options + $this->default_options();
 		$options['raw_plain_text'] = $message;
 		$request = $this->DoRequest('/mailer', $options, $return, 'POST', true);
