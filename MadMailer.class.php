@@ -27,9 +27,14 @@
 	OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 	THE SOFTWARE.
 */
-
+if (!class_defined('Spyc')) {
+	require('Spyc.class.php');
+}
 class MadMailer {
 	function __construct($email, $api_key, $debug = false) {
+		if (!class_defined('Spyc')) {
+			die('MadMailer requires the Spyc YAML PHP class to function. Please make sure you have it available.');
+		}
 		$this->username = $email;
 		$this->api_key = $api_key;
 		$this->debug = $debug;
@@ -85,20 +90,7 @@ class MadMailer {
 		return $post_string;
 	}
 	function to_yaml($arr) {
-		$yaml_str = "";
-		foreach ($arr as $key => $value) {
-			$key = str_replace(' ', '_', $key);
-			if (strstr($value, 'http')) {
-				$yaml_str .= $key . ': ' . $value . "\n";
-			} else {
-				if (strstr($value, ':')) {
-					$yaml_str .= $key . ': "' . urlencode($value) . '"' . "\n";
-				} else {
-					$yaml_str .= $key . ': ' . urlencode($value) . "\n";
-				}
-			}
-		}
-		return $yaml_str;
+		return Spyc::YAMLDump($arr);
 	}
 	function build_csv($arr) {
 		$csv = "";
@@ -149,7 +141,7 @@ class MadMailer {
 		return $request;
 	}
 	function SendMessage($options, $yaml_body, $return = false) {
-		$yaml = "--- " . $this->to_yaml($yaml_body);
+		$yaml = $this->to_yaml($yaml_body);
 		$options = $options + $this->default_options();
 		$options['body'] = $yaml;
 		$request = $this->DoRequest('/mailer', $options, $return, 'POST', true);
@@ -182,12 +174,6 @@ class MadMailer {
 	function Search($query_string, $raw = false, $return = false) {
 		$options = array('query' => $query_string, 'raw' => $raw) + $this->default_options();
 		$request = $this->DoRequest('/audience_members/search.xml', $options, $return);
-		return $request;
-	}
-	function SendWithExternalYAML($options, $yaml_body, $return = false) {
-		$options = $options + $this->default_options();
-		$options['body'] = $yaml_body;
-		$request = $this->DoRequest('/mailer', $options, $return, 'POST', true);
 		return $request;
 	}
 }
