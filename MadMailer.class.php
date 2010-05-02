@@ -41,9 +41,9 @@ class MadMailer {
 		$url = "";
 		$request_options = $this->build_request_string($options);
 		if ($mail == false) {
-			$url .= "http://api.madmimi.com{$path}";
+			$url .= "http://madmimi.com{$path}";
 		} else {
-			$url .= "https://api.madmimi.com{$path}";
+			$url .= "https://madmimi.com{$path}";
 		}
 		if ($method == 'GET') {
 			$url .= $request_options;
