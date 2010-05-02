@@ -27,14 +27,11 @@
 	OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 	THE SOFTWARE.
 */
-if (!class_defined('Spyc')) {
-	require('Spyc.class.php');
+if (!class_exists('Spyc')) {
+	require("Spyc.class.php");
 }
 class MadMailer {
 	function __construct($email, $api_key, $debug = false) {
-		if (!class_defined('Spyc')) {
-			die('MadMailer requires the Spyc YAML PHP class to function. Please make sure you have it available.');
-		}
 		$this->username = $email;
 		$this->api_key = $api_key;
 		$this->debug = $debug;
@@ -90,7 +87,8 @@ class MadMailer {
 		return $post_string;
 	}
 	function to_yaml($arr) {
-		return Spyc::YAMLDump($arr);
+		$yaml = Spyc::YAMLDump($arr);
+		return $yaml;
 	}
 	function build_csv($arr) {
 		$csv = "";
