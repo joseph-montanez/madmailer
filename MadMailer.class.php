@@ -50,7 +50,6 @@ class MadMailer {
 		if ($method == 'GET') {
 			$url .= $request_options;
 		}
-		ob_start();
 		$ch = curl_init();
 		curl_setopt($ch, CURLOPT_URL, $url);
 		switch($method) {
@@ -59,6 +58,7 @@ class MadMailer {
 			case 'POST':
 				curl_setopt($ch, CURLOPT_POST, TRUE);
 				curl_setopt($ch, CURLOPT_POSTFIELDS, $request_options);
+				curl_setopt($ch, CURLOPT_RETURNTRANSFER, $return_status);
 				if (strstr($url, 'https')) {
 					curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, FALSE);
 					curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, FALSE);
@@ -74,7 +74,6 @@ class MadMailer {
 			$result = curl_exec($ch) or die(curl_error($ch));
 		}
 		curl_close($ch);
-		ob_flush();
 		if ($return_status == true && $this->debug == false) {
 			return $result;
 		}
