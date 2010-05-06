@@ -1,6 +1,5 @@
 <?php
 require(dirname(__FILE__) . '/../MadMailer.class.php');
-require(dirname(__FILE__) . '/../Spyc.class.php');
 
 $body_array = array('dumped_text' => 'This is my YAML value! It has :colons : and a real messy t37953784625&*^#%*Q^%# bunch of stuff.');
 
