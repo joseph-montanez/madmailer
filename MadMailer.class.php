@@ -110,7 +110,7 @@ class MadMailer {
 		return $request;
 	}
 	function Lists($return = false) {
-		$request = $this->DoRequest('/audience_lists/lists.xml', $this->default_options(), $return);
+		$request = $this->DoRequest('/audience_lists/lists.xml?', $this->default_options(), $return);
 		return $request;
 	}
 	function AddUser($user, $return = false) {
