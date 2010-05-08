@@ -81,6 +81,9 @@ class MadMailer {
 	function build_request_string($arr) {
 		foreach($arr as $key => $value) {
 			$post_string .= "" . $key . "=" . urlencode($value) . "&";
+			//if (strstr($post_string, 'recipients')) {
+			//	$post_string = str_replace('%2B', '+', $post_string);
+			//}
 		}
 		$post_string = substr($post_string, 0, -1);
 		return $post_string;
@@ -141,7 +144,11 @@ class MadMailer {
 		$yaml = $this->to_yaml($yaml_body);
 		$options = $options + $this->default_options();
 		$options['body'] = $yaml;
-		$request = $this->DoRequest('/mailer', $options, $return, 'POST', true);
+		if ($options['list_name']) {
+			$request = $this->DoRequest('/mailer/to_list', $options, $return, 'POST', true);
+		} else {
+			$request = $this->DoRequest('/mailer', $options, $return, 'POST', true);
+		}
 	}
 	function SendHTML($options, $html, $return = false) {
 		if ((!strstr($html, '[[tracking_beacon]]')) || (!strstr($html, '[[peek_image]]'))) {
@@ -149,7 +156,11 @@ class MadMailer {
 		}
 		$options = $options + $this->default_options();
 		$options['raw_html'] = $html;
-		$request = $this->DoRequest('/mailer', $options, $return, 'POST', true);
+		if ($options['list_name']) {
+			$request = $this->DoRequest('/mailer/to_list', $options, $return, 'POST', true);
+		} else {
+			$request = $this->DoRequest('/mailer', $options, $return, 'POST', true);
+		}
 		return $request;
 	}
 	function SendPlainText($options, $message, $return = false) {
@@ -158,7 +169,11 @@ class MadMailer {
 		}
 		$options = $options + $this->default_options();
 		$options['raw_plain_text'] = $message;
-		$request = $this->DoRequest('/mailer', $options, $return, 'POST', true);
+		if ($options['list_name']) {
+			$request = $this->DoRequest('/mailer/to_list', $options, $return, 'POST', true);
+		} else {
+			$request = $this->DoRequest('/mailer', $options, $return, 'POST', true);
+		}
 	}
 	function SuppressedSince($unix_timestamp, $return = false) {
 		$request = $this->DoRequest('/audience_members/suppressed_since/' . $unix_timestamp . '.txt?', $this->default_options(), $return);
