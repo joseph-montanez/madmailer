@@ -81,9 +81,6 @@ class MadMailer {
 	function build_request_string($arr) {
 		foreach($arr as $key => $value) {
 			$post_string .= "" . $key . "=" . urlencode($value) . "&";
-			//if (strstr($post_string, 'recipients')) {
-			//	$post_string = str_replace('%2B', '+', $post_string);
-			//}
 		}
 		$post_string = substr($post_string, 0, -1);
 		return $post_string;
