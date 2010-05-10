@@ -21,8 +21,9 @@ foreach ($memberships as $list) {
 }
 
 // Maybe we just want to send a message?
-$recipient = array('Name' => 'Nicholas Young', 'Email' => 'rockandroll@example.com');
-$message = array('PromoName' => 'My Awesome Promotion', 'Subject' => 'You Gotta Read This', 'FromAddr' => 'noreply@example.com');
+$options = array('recipients' => 'Nicholas Young <rockandroll@example.com>', 
+				 'promotion_name' => 'My Awesome Promotion', 'subject' => 'You Gotta Read This', 
+				 'from' => 'Mad Mailer <noreply@example.com>');
 $body = array('Greeting' => 'Hello From MadMailer!');
-$mailer->SendMessage($recipient, $message, $body);
+$mailer->SendMessage($options, $body);
 ?>
