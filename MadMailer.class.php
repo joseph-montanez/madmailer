@@ -52,13 +52,13 @@ class MadMailer {
 		}
 		$ch = curl_init();
 		curl_setopt($ch, CURLOPT_URL, $url);
+		curl_setopt($ch, CURLOPT_RETURNTRANSFER, $return_status);
 		switch($method) {
 			case 'GET':
 				break;
 			case 'POST':
 				curl_setopt($ch, CURLOPT_POST, TRUE);
 				curl_setopt($ch, CURLOPT_POSTFIELDS, $request_options);
-				curl_setopt($ch, CURLOPT_RETURNTRANSFER, $return_status);
 				if (strstr($url, 'https')) {
 					curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, FALSE);
 					curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, FALSE);
