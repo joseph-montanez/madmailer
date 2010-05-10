@@ -8,7 +8,7 @@ $mailer = new MadMailer('YOUR USERNAME (OR E-MAIL ADDRESS)', 'YOUR API KEY');
 
 // Get all lists for this account..
 $lists = $mailer->Lists();
-
+$lists = new SimpleXMLElement($lists);
 // ...and loop through them.
 foreach ($lists as $list) {
 	echo $list['name'] . "<br />";
@@ -16,6 +16,7 @@ foreach ($lists as $list) {
 
 // Now, let's check a user's membership status...
 $memberships = $mailer->Memberships('noreply@example.com');
+$memberships = new SimpleXMLElement($memberships);
 foreach ($memberships as $list) {
 	echo $list['name'] . "<br />";
 }
