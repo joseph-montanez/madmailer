@@ -1,13 +1,8 @@
-/*
-	MadMailer => a short, sweet PHP class for the MadMimi Mailer API.
-	"Taking the pain out of creating cURL requests in PHP since 2009."
-	(Many thanks to Dave, Gary, and the rest of the MadMimi crew for creating such an awesome API!)
+h1. MadMailer => a short, sweet PHP class for the MadMimi Mailer API.
 	
-	Released under the MIT License
-	_______________________________________
-	
-	Release notes:
-	November 12, 2009: General release - only basic functions are provided.
+h1. Release notes:
+
+November 12, 2009: General release - only basic functions are provided.
 	December 27, 2009: Cleaned up the cURL requests, and added methods for Lists and Memberships.
 	April 12, 2010:	   Revamped the AddUser function. Now with custom fields!
 	April 23, 2010:    NOTE: As of commit (b5d2f3a7ca65d3b0afa48b40e4e0bb0f42e789e2) spaces in body array keys are automatically converted to underscores. More info here: http://github.com/nicholaswyoung/madmailer/commit/b5d2f3a7ca65d3b0afa48b40e4e0bb0f42e789e2
