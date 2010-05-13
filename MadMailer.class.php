@@ -30,6 +30,9 @@
 if (!class_exists('Spyc')) {
 	require("Spyc.class.php");
 }
+if (!function_exists('curl_init')) {
+  die('MadMailer requires the PHP cURL extension.');
+}
 class MadMailer {
 	function __construct($email, $api_key, $debug = false) {
 		$this->username = $email;
