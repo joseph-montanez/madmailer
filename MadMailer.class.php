@@ -151,7 +151,7 @@ class MadMailer {
 		}
 	}
 	function SendHTML($options, $html, $return = false) {
-		if ((!strstr($html, '[[tracking_beacon]]')) && (!strstr($html, '[[peek_image]]'))) {
+		if ((!strstr($html, '[[tracking_beacon]]')) || (!strstr($html, '[[peek_image]]'))) {
 			die('Please include either the [[tracking_beacon]] or the [[peek_image]] macro in your HTML.');
 		}
 		$options = $options + $this->default_options();
