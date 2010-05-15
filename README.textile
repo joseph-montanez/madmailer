@@ -14,5 +14,3 @@ November 12, 2009: General release - only basic functions are provided.
 
 	THE ROADMAP (i.e. features I want to add):
 	=> Multiple recipients
-	
-*/
