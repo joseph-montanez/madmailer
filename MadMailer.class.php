@@ -82,6 +82,7 @@ class MadMailer {
 		}
 	}
 	function build_request_string($arr) {
+		$post_string = '';
 		foreach($arr as $key => $value) {
 			$post_string .= "" . $key . "=" . urlencode($value) . "&";
 		}
