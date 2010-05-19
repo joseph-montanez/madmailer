@@ -113,7 +113,7 @@ class MadMailer {
 		$request = $this->DoRequest('/audience_members', $options, $return, 'POST');
 		return $request;
 	}
-	function Lists($return = false) {
+	function Lists($return = true) {
 		$request = $this->DoRequest('/audience_lists/lists.xml?', $this->default_options(), $return);
 		return $request;
 	}
@@ -126,7 +126,7 @@ class MadMailer {
 		$request = $this->DoRequest('/audience_lists/' . rawurlencode($list_name) . "/remove", $options, $return, 'POST');
 		return $request;
 	}
-	function Memberships($email, $return = false) {
+	function Memberships($email, $return = true) {
 		$url = str_replace('%email%', $email, '/audience_members/%email%/lists.xml?');
 		$request = $this->DoRequest($url, $this->default_options(), $return);
 		return $request;
