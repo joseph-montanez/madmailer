@@ -195,5 +195,15 @@ class MadMailer {
 		$request = $this->DoRequest('/audience_members/search.xml', $options, $return);
 		return $request;
 	}
+	/*
+	 *	Check for username/key authentication
+	 */
+	function Authenticate() {
+		$output = strtolower($this->Lists(true));
+		if (strpos($output, 'unable to authenticate') === false) {
+			return true;
+		}		
+		return false;
+	}
 }
 ?>
