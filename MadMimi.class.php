@@ -1,13 +1,13 @@
 <?php
 /*
-	Mad Mimi for PHP
+	MadMailer => a short, sweet PHP class for the MadMimi API.
 	v2.0 - Cleaner, faster, and much easier to use and extend. (In my opinion!)
 	
 	For release notes, see the README that should have been included.
 	
 	_______________________________________
 
-	Copyright (c) 2010 Nicholas Young <nicholas@madmimi.com>
+	Copyright (c) 2010 Nicholas Young
 
 	Permission is hereby granted, free of charge, to any person obtaining a copy
 	of this software and associated documentation files (the "Software"), to deal
@@ -31,9 +31,9 @@ if (!class_exists('Spyc')) {
 	require("Spyc.class.php");
 }
 if (!function_exists('curl_init')) {
-  die('Mad Mimi for PHP requires the PHP cURL extension.');
+  die('MadMailer requires the PHP cURL extension.');
 }
-class MadMimi {
+class MadMailer {
 	function __construct($email, $api_key, $debug = false) {
 		$this->username = $email;
 		$this->api_key = $api_key;
@@ -55,13 +55,13 @@ class MadMimi {
 		}
 		$ch = curl_init();
 		curl_setopt($ch, CURLOPT_URL, $url);
-		curl_setopt($ch, CURLOPT_RETURNTRANSFER, $return_status);
+		curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
 		switch($method) {
 			case 'GET':
 				break;
 			case 'POST':
 				curl_setopt($ch, CURLOPT_POST, TRUE);
-				curl_setopt($ch, CURLOPT_POSTFIELDS, TRUE);
+				curl_setopt($ch, CURLOPT_POSTFIELDS, $request_options);
 				if (strstr($url, 'https')) {
 					curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, FALSE);
 					curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, FALSE);
@@ -82,7 +82,6 @@ class MadMimi {
 		}
 	}
 	function build_request_string($arr) {
-		# Breaks PHP4 support, but is much neater. Credit to gorilla3d. ;)    
 		return http_build_query($arr);
 	}
 	function to_yaml($arr) {
@@ -109,7 +108,7 @@ class MadMimi {
 		$request = $this->DoRequest('/audience_members', $options, $return, 'POST');
 		return $request;
 	}
-	function Lists($return = true) {
+	function Lists($return = false) {
 		$request = $this->DoRequest('/audience_lists/lists.xml?', $this->default_options(), $return);
 		return $request;
 	}
@@ -122,7 +121,7 @@ class MadMimi {
 		$request = $this->DoRequest('/audience_lists/' . rawurlencode($list_name) . "/remove", $options, $return, 'POST');
 		return $request;
 	}
-	function Memberships($email, $return = true) {
+	function Memberships($email, $return = false) {
 		$url = str_replace('%email%', $email, '/audience_members/%email%/lists.xml?');
 		$request = $this->DoRequest($url, $this->default_options(), $return);
 		return $request;
@@ -137,7 +136,7 @@ class MadMimi {
 		$request = $this->DoRequest('/audience_lists/' . rawurlencode($list_name), $options, $return, 'POST');
 		return $request;
 	}
-	function SendMessage($options, $yaml_body, $return = false) {
+	function SendMessage($options, $yaml_body, $return = true) {
 		$yaml = $this->to_yaml($yaml_body);
 		$options = $options + $this->default_options();
 		$options['body'] = $yaml;
@@ -146,8 +145,9 @@ class MadMimi {
 		} else {
 			$request = $this->DoRequest('/mailer', $options, $return, 'POST', true);
 		}
+		return $request;
 	}
-	function SendHTML($options, $html, $return = false) {
+	function SendHTML($options, $html, $return = true) {
 		if (strstr($html, '[[tracking_beacon]]') === false && strstr($html, '[[peek_image]]') === false) {
 			die('Please include either the [[tracking_beacon]] or the [[peek_image]] macro in your HTML.');
 		} else if (strstr($html, '[[unsubscribe]]') === false) {
@@ -175,11 +175,11 @@ class MadMimi {
 			$request = $this->DoRequest('/mailer', $options, $return, 'POST', true);
 		}
 	}
-	function SuppressedSince($unix_timestamp, $return = true) {
+	function SuppressedSince($unix_timestamp, $return = false) {
 		$request = $this->DoRequest('/audience_members/suppressed_since/' . $unix_timestamp . '.txt?', $this->default_options(), $return);
 		return $request;
 	}
-	function Promotions($return = true) {
+	function Promotions($return = false) {
 		$request = $this->DoRequest('/promotions.xml?', $this->default_options(), $return);
 		return $request;
 	}
@@ -189,20 +189,10 @@ class MadMimi {
 		$request = $this->DoRequest($url, $this->default_options(), $return);
 		return $request;
 	}
-	function Search($query_string, $raw = false, $return = true) {
+	function Search($query_string, $raw = false, $return = false) {
 		$options = array('query' => $query_string, 'raw' => $raw) + $this->default_options();
 		$request = $this->DoRequest('/audience_members/search.xml', $options, $return);
 		return $request;
-	}
-	/*
-	 *	Check for username/key authentication
-	 */
-	function Authenticate() {
-		$output = strtolower($this->Lists(true));
-		if (strpos($output, 'unable to authenticate') === false) {
-			return true;
-		}		
-		return false;
 	}
 }
 ?>
