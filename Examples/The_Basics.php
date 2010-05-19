@@ -6,25 +6,29 @@ require(dirname(__FILE__) . '/../MadMailer.class.php');
 // the transaction ID when sending a message. It also defaults to false.
 $mailer = new MadMailer('YOUR USERNAME (OR E-MAIL ADDRESS)', 'YOUR API KEY'); 
 
-// Get all lists for this account..
-$lists = $mailer->Lists();
-$lists = new SimpleXMLElement($lists);
-// ...and loop through them.
-foreach ($lists as $list) {
-	echo $list['name'] . "<br />";
-}
+if ($mailer->Authenticate()) {
+	// Get all lists for this account..
+	$lists = $mailer->Lists();
+	$lists = new SimpleXMLElement($lists);
+	// ...and loop through them.
+	foreach ($lists as $list) {
+		echo $list['name'] . "<br />";
+	}
 
-// Now, let's check a user's membership status...
-$memberships = $mailer->Memberships('noreply@example.com');
-$memberships = new SimpleXMLElement($memberships);
-foreach ($memberships as $list) {
-	echo $list['name'] . "<br />";
-}
+	// Now, let's check a user's membership status...
+	$memberships = $mailer->Memberships('noreply@example.com');
+	$memberships = new SimpleXMLElement($memberships);
+	foreach ($memberships as $list) {
+		echo $list['name'] . "<br />";
+	}
 
-// Maybe we just want to send a message?
-$options = array('recipients' => 'Nicholas Young <rockandroll@example.com>', 
-				 'promotion_name' => 'My Awesome Promotion', 'subject' => 'You Gotta Read This', 
-				 'from' => 'Mad Mailer <noreply@example.com>');
-$body = array('Greeting' => 'Hello From MadMailer!');
-$mailer->SendMessage($options, $body);
+	// Maybe we just want to send a message?
+	$options = array('recipients' => 'Nicholas Young <rockandroll@example.com>', 
+					 'promotion_name' => 'My Awesome Promotion', 'subject' => 'You Gotta Read This', 
+					 'from' => 'Mad Mailer <noreply@example.com>');
+	$body = array('Greeting' => 'Hello From MadMailer!');
+	$mailer->SendMessage($options, $body);
+} else {
+	echo 'Wrong username or api key'.'<br />'.PHP_EOL;
+}
 ?>
