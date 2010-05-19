@@ -55,7 +55,7 @@ class MadMailer {
 		}
 		$ch = curl_init();
 		curl_setopt($ch, CURLOPT_URL, $url);
-		curl_setopt($ch, CURLOPT_RETURNTRANSFER, $return_status);
+		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 		switch($method) {
 			case 'GET':
 				break;
