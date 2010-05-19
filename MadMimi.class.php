@@ -31,7 +31,7 @@ if (!class_exists('Spyc')) {
 	require("Spyc.class.php");
 }
 if (!function_exists('curl_init')) {
-  die('MadMailer requires the PHP cURL extension.');
+  die('Mad Mimi for PHP requires the PHP cURL extension.');
 }
 class MadMimi {
 	function __construct($email, $api_key, $debug = false) {
