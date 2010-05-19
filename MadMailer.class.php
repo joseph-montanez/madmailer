@@ -113,7 +113,7 @@ class MadMailer {
 		$request = $this->DoRequest('/audience_members', $options, $return, 'POST');
 		return $request;
 	}
-	function Lists($return = false) {
+	function Lists($return = true) {
 		$request = $this->DoRequest('/audience_lists/lists.xml?', $this->default_options(), $return);
 		return $request;
 	}
@@ -126,7 +126,7 @@ class MadMailer {
 		$request = $this->DoRequest('/audience_lists/' . rawurlencode($list_name) . "/remove", $options, $return, 'POST');
 		return $request;
 	}
-	function Memberships($email, $return = false) {
+	function Memberships($email, $return = true) {
 		$url = str_replace('%email%', $email, '/audience_members/%email%/lists.xml?');
 		$request = $this->DoRequest($url, $this->default_options(), $return);
 		return $request;
@@ -176,11 +176,11 @@ class MadMailer {
 			$request = $this->DoRequest('/mailer', $options, $return, 'POST', true);
 		}
 	}
-	function SuppressedSince($unix_timestamp, $return = false) {
+	function SuppressedSince($unix_timestamp, $return = true) {
 		$request = $this->DoRequest('/audience_members/suppressed_since/' . $unix_timestamp . '.txt?', $this->default_options(), $return);
 		return $request;
 	}
-	function Promotions($return = false) {
+	function Promotions($return = true) {
 		$request = $this->DoRequest('/promotions.xml?', $this->default_options(), $return);
 		return $request;
 	}
@@ -190,7 +190,7 @@ class MadMailer {
 		$request = $this->DoRequest($url, $this->default_options(), $return);
 		return $request;
 	}
-	function Search($query_string, $raw = false, $return = false) {
+	function Search($query_string, $raw = false, $return = true) {
 		$options = array('query' => $query_string, 'raw' => $raw) + $this->default_options();
 		$request = $this->DoRequest('/audience_members/search.xml', $options, $return);
 		return $request;
