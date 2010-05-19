@@ -55,7 +55,7 @@ class MadMimi {
 		}
 		$ch = curl_init();
 		curl_setopt($ch, CURLOPT_URL, $url);
-		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+		curl_setopt($ch, CURLOPT_RETURNTRANSFER, $return_status);
 		switch($method) {
 			case 'GET':
 				break;
