@@ -82,11 +82,7 @@ class MadMailer {
 		}
 	}
 	function build_request_string($arr) {
-		foreach($arr as $key => $value) {
-			$post_string .= "" . $key . "=" . urlencode($value) . "&";
-		}
-		$post_string = substr($post_string, 0, -1);
-		return $post_string;
+		return http_build_query($arr);
 	}
 	function to_yaml($arr) {
 		$yaml = Spyc::YAMLDump($arr);
@@ -151,9 +147,12 @@ class MadMailer {
 		}
 	}
 	function SendHTML($options, $html, $return = false) {
-		if ((!strstr($html, '[[tracking_beacon]]')) || (!strstr($html, '[[peek_image]]'))) {
+		if (strstr($html, '[[tracking_beacon]]') === false && strstr($html, '[[peek_image]]') === false) {
 			die('Please include either the [[tracking_beacon]] or the [[peek_image]] macro in your HTML.');
+		} else if (strstr($html, '[[unsubscribe]]') === false) {
+			die('Please include the [[unsubscribe]] macro in your HTML.');
 		}
+		
 		$options = $options + $this->default_options();
 		$options['raw_html'] = $html;
 		if ($options['list_name']) {
