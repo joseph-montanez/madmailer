@@ -82,12 +82,8 @@ class MadMailer {
 		}
 	}
 	function build_request_string($arr) {
-    $post_string = "";
-		foreach($arr as $key => $value) {
-			$post_string .= "" . $key . "=" . urlencode($value) . "&";
-		}
-		$post_string = substr($post_string, 0, -1);
-		return $post_string;
+    # Breaks PHP4 support, but is much neater. Credit to gorilla3d. ;)    
+    return http_build_query($arr);
 	}
 	function to_yaml($arr) {
 		$yaml = Spyc::YAMLDump($arr);
@@ -152,7 +148,7 @@ class MadMailer {
 		}
 	}
 	function SendHTML($options, $html, $return = false) {
-		if ((!strstr($html, '[[tracking_beacon]]')) || (!strstr($html, '[[peek_image]]'))) {
+		if ((strstr($html, '[[tracking_beacon]]')) || (!strstr($html, '[[peek_image]]'))) {
 			die('Please include either the [[tracking_beacon]] or the [[peek_image]] macro in your HTML.');
 		}
 		$options = $options + $this->default_options();
