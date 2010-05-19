@@ -1,5 +1,5 @@
 <?php
-require(dirname(__FILE__) . '/../MadMailer.class.php');
+require(dirname(__FILE__) . '/../MadMimi.class.php');
 
 // There are a total of four arguments that can be used on the next line. The first two are shown here, the second two
 // are optional. The first of them is a debugger, which defaults to false, and the second, allows you to print
