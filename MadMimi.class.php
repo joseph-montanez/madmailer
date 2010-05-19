@@ -61,7 +61,7 @@ class MadMimi {
 				break;
 			case 'POST':
 				curl_setopt($ch, CURLOPT_POST, TRUE);
-				curl_setopt($ch, CURLOPT_POSTFIELDS, $request_options);
+				curl_setopt($ch, CURLOPT_POSTFIELDS, TRUE);
 				if (strstr($url, 'https')) {
 					curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, FALSE);
 					curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, FALSE);
