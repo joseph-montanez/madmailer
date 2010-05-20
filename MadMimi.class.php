@@ -1,13 +1,13 @@
 <?php
 /*
-	MadMailer => a short, sweet PHP class for the MadMimi API.
+	Mad Mimi for PHP
 	v2.0 - Cleaner, faster, and much easier to use and extend. (In my opinion!)
 	
 	For release notes, see the README that should have been included.
 	
 	_______________________________________
 
-	Copyright (c) 2010 Nicholas Young
+	Copyright (c) 2010 Nicholas Young <nicholas@madmimi.com>
 
 	Permission is hereby granted, free of charge, to any person obtaining a copy
 	of this software and associated documentation files (the "Software"), to deal
@@ -31,9 +31,9 @@ if (!class_exists('Spyc')) {
 	require("Spyc.class.php");
 }
 if (!function_exists('curl_init')) {
-  die('MadMailer requires the PHP cURL extension.');
+  die('Mad Mimi for PHP requires the PHP cURL extension.');
 }
-class MadMailer {
+class MadMimi {
 	function __construct($email, $api_key, $debug = false) {
 		$this->username = $email;
 		$this->api_key = $api_key;
@@ -82,12 +82,8 @@ class MadMailer {
 		}
 	}
 	function build_request_string($arr) {
-		$post_string = '';
-		foreach($arr as $key => $value) {
-			$post_string .= "" . $key . "=" . urlencode($value) . "&";
-		}
-		$post_string = substr($post_string, 0, -1);
-		return $post_string;
+    # Breaks PHP4 support, but is much neater. Credit to gorilla3d. ;)    
+    return http_build_query($arr);
 	}
 	function to_yaml($arr) {
 		$yaml = Spyc::YAMLDump($arr);
@@ -176,11 +172,11 @@ class MadMailer {
 			$request = $this->DoRequest('/mailer', $options, $return, 'POST', true);
 		}
 	}
-	function SuppressedSince($unix_timestamp, $return = false) {
+	function SuppressedSince($unix_timestamp, $return = true) {
 		$request = $this->DoRequest('/audience_members/suppressed_since/' . $unix_timestamp . '.txt?', $this->default_options(), $return);
 		return $request;
 	}
-	function Promotions($return = false) {
+	function Promotions($return = true) {
 		$request = $this->DoRequest('/promotions.xml?', $this->default_options(), $return);
 		return $request;
 	}
@@ -190,7 +186,7 @@ class MadMailer {
 		$request = $this->DoRequest($url, $this->default_options(), $return);
 		return $request;
 	}
-	function Search($query_string, $raw = false, $return = false) {
+	function Search($query_string, $raw = false, $return = true) {
 		$options = array('query' => $query_string, 'raw' => $raw) + $this->default_options();
 		$request = $this->DoRequest('/audience_members/search.xml', $options, $return);
 		return $request;
