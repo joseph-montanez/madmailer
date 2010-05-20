@@ -132,6 +132,18 @@ class MadMimi {
 		$request = $this->DoRequest('/audience_lists', $options, $return, 'POST');
 		return $request;
 	}
+	function RenameList($list_name, $new_list_name, $return = false) {
+		$lists = $this->Lists(true);
+		$lists = new SimpleXMLElement($lists);
+		foreach ($lists as $list) {
+			if (strcmp(trim($list['name']), trim($list_name)) === 0) {
+				$options = array('value' => $new_list_name) + $this->default_options();
+				$request = $this->DoRequest('/audience_lists/set_list_name/' . $list['id'] . '?', $options, $return, 'GET');
+				break;
+			}
+		}
+		return $request;
+	}
 	function DeleteList($list_name, $return = false) {
 		$options = array('_method' => 'delete') + $this->default_options();
 		$request = $this->DoRequest('/audience_lists/' . rawurlencode($list_name), $options, $return, 'POST');
