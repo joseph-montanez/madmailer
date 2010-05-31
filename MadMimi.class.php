@@ -44,7 +44,7 @@ class MadMimi {
 	}
 	function DoRequest($path, $options, $return_status = false, $method = 'GET', $mail = false) {
 		$url = "";
-		$request_options = $this->build_request_string($options);
+		$request_options = http_build_query($options);
 		if ($mail == false) {
 			$url .= "http://api.madmimi.com{$path}";
 		} else {
@@ -80,10 +80,6 @@ class MadMimi {
 		if ($return_status == true && $this->debug == false) {
 			return $result;
 		}
-	}
-	function build_request_string($arr) {
-    # Breaks PHP4 support, but is much neater. Credit to gorilla3d. ;)    
-    return http_build_query($arr);
 	}
 	function to_yaml($arr) {
 		$yaml = Spyc::YAMLDump($arr);
