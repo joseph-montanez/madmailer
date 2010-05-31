@@ -55,7 +55,11 @@ class MadMimi {
 		}
 		$ch = curl_init();
 		curl_setopt($ch, CURLOPT_URL, $url);
-		curl_setopt($ch, CURLOPT_RETURNTRANSFER, $return_status);
+		if ($return_status == true) {
+			curl_setopt($ch, CURLOPT_RETURNTRANSFER, 0);
+		} else {
+			curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+		}
 		switch($method) {
 			case 'GET':
 				break;
@@ -142,6 +146,7 @@ class MadMimi {
 		} else {
 			$request = $this->DoRequest('/mailer', $options, $return, 'POST', true);
 		}
+		return $request;
 	}
 	function SendHTML($options, $html, $return = false) {
 		if ((!strstr($html, '[[tracking_beacon]]')) || (!strstr($html, '[[peek_image]]'))) {
@@ -167,6 +172,7 @@ class MadMimi {
 		} else {
 			$request = $this->DoRequest('/mailer', $options, $return, 'POST', true);
 		}
+		return $request;
 	}
 	function SuppressedSince($unix_timestamp, $return = true) {
 		$request = $this->DoRequest('/audience_members/suppressed_since/' . $unix_timestamp . '.txt?', $this->default_options(), $return);
