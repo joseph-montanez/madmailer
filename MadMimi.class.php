@@ -134,8 +134,8 @@ class MadMimi {
 		$request = $this->DoRequest('/audience_lists/' . rawurlencode($list_name), $options, $return, 'POST');
 		return $request;
 	}
-	function SendMessage($options, $yaml_body, $return = false) {
-		if (class_exists('Spyc')) {
+	function SendMessage($options, $yaml_body = null, $return = false) {
+		if (class_exists('Spyc') && $yaml_body != null) {
 			$options['body'] = Spyc::YAMLDump($yaml_body);
 		}
 		$options = $options + $this->default_options();
