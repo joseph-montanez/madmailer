@@ -44,7 +44,8 @@ class MadMimi {
 	}
 	function DoRequest($path, $options, $return_status = false, $method = 'GET', $mail = false) {
 		$url = "";
-		$request_options = http_build_query($options);
+		$request_options = "?";
+		$request_options .= http_build_query($options);
 		if ($mail == false) {
 			$url .= "http://api.madmimi.com{$path}";
 		} else {
@@ -106,11 +107,11 @@ class MadMimi {
 	}
 	function Import($csv_data, $return = false) {
 		$options = array('csv_file' => $csv_data) + $this->default_options();
-		$request = $this->DoRequest('/audience_members?', $options, $return, 'POST');
+		$request = $this->DoRequest('/audience_members', $options, $return, 'POST');
 		return $request;
 	}
 	function Lists($return = true) {
-		$request = $this->DoRequest('/audience_lists/lists.xml?', $this->default_options(), $return);
+		$request = $this->DoRequest('/audience_lists/lists.xml', $this->default_options(), $return);
 		return $request;
 	}
 	function AddUser($user, $return = false) {
@@ -119,22 +120,22 @@ class MadMimi {
 	}
 	function RemoveUser($email, $list_name, $return = false) {
 		$options = array('email' => $email) + $this->default_options();
-		$request = $this->DoRequest('/audience_lists/' . rawurlencode($list_name) . "/remove?", $options, $return, 'POST');
+		$request = $this->DoRequest('/audience_lists/' . rawurlencode($list_name) . "/remove", $options, $return, 'POST');
 		return $request;
 	}
 	function Memberships($email, $return = true) {
-		$url = str_replace('%email%', $email, '/audience_members/%email%/lists.xml?');
+		$url = str_replace('%email%', $email, '/audience_members/%email%/lists.xml');
 		$request = $this->DoRequest($url, $this->default_options(), $return);
 		return $request;
 	}
 	function NewList($list_name, $return = false) {
 		$options = array('name' => $list_name) + $this->default_options();
-		$request = $this->DoRequest('/audience_lists?', $options, $return, 'POST');
+		$request = $this->DoRequest('/audience_lists', $options, $return, 'POST');
 		return $request;
 	}
 	function DeleteList($list_name, $return = false) {
 		$options = array('_method' => 'delete') + $this->default_options();
-		$request = $this->DoRequest('/audience_lists/' . rawurlencode($list_name) + '?', $options, $return, 'POST');
+		$request = $this->DoRequest('/audience_lists/' . rawurlencode($list_name), $options, $return, 'POST');
 		return $request;
 	}
 	function SendMessage($options, $yaml_body, $return = false) {
@@ -142,9 +143,9 @@ class MadMimi {
 		$options = $options + $this->default_options();
 		$options['body'] = $yaml;
 		if ($options['list_name']) {
-			$request = $this->DoRequest('/mailer/to_list?', $options, $return, 'POST', true);
+			$request = $this->DoRequest('/mailer/to_list', $options, $return, 'POST', true);
 		} else {
-			$request = $this->DoRequest('/mailer?', $options, $return, 'POST', true);
+			$request = $this->DoRequest('/mailer', $options, $return, 'POST', true);
 		}
 		return $request;
 	}
@@ -155,9 +156,9 @@ class MadMimi {
 		$options = $options + $this->default_options();
 		$options['raw_html'] = $html;
 		if ($options['list_name']) {
-			$request = $this->DoRequest('/mailer/to_list?', $options, $return, 'POST', true);
+			$request = $this->DoRequest('/mailer/to_list', $options, $return, 'POST', true);
 		} else {
-			$request = $this->DoRequest('/mailer?', $options, $return, 'POST', true);
+			$request = $this->DoRequest('/mailer', $options, $return, 'POST', true);
 		}
 		return $request;
 	}
@@ -168,38 +169,37 @@ class MadMimi {
 		$options = $options + $this->default_options();
 		$options['raw_plain_text'] = $message;
 		if ($options['list_name']) {
-			$request = $this->DoRequest('/mailer/to_list?', $options, $return, 'POST', true);
+			$request = $this->DoRequest('/mailer/to_list', $options, $return, 'POST', true);
 		} else {
-			$request = $this->DoRequest('/mailer?', $options, $return, 'POST', true);
+			$request = $this->DoRequest('/mailer', $options, $return, 'POST', true);
 		}
 		return $request;
 	}
 	function SuppressedSince($unix_timestamp, $return = true) {
-		$request = $this->DoRequest('/audience_members/suppressed_since/' . $unix_timestamp . '.txt?', $this->default_options(), $return);
+		$request = $this->DoRequest('/audience_members/suppressed_since/' . $unix_timestamp . '.txt', $this->default_options(), $return);
 		return $request;
 	}
 	function Promotions($return = true) {
-		$request = $this->DoRequest('/promotions.xml?', $this->default_options(), $return);
+		$request = $this->DoRequest('/promotions.xml', $this->default_options(), $return);
 		return $request;
 	}
 	function MailingStats($promotion_id, $mailing_id, $return = false) {
-		$url = str_replace("%promotion_id%", $promotion_id, "/promotions/%promotion_id%/mailings/%mailing_id%.xml?");
+		$url = str_replace("%promotion_id%", $promotion_id, "/promotions/%promotion_id%/mailings/%mailing_id%.xml");
 		$url = str_replace("%mailing_id%", $mailing_id, $url);
 		$request = $this->DoRequest($url, $this->default_options(), $return);
 		return $request;
 	}
 	function Search($query_string, $raw = false, $return = true) {
 		$options = array('query' => $query_string, 'raw' => $raw) + $this->default_options();
-		$request = $this->DoRequest('/audience_members/search.xml?', $options, $return);
+		$request = $this->DoRequest('/audience_members/search.xml', $options, $return);
 		return $request;
 	}
-	# Note: these new functions should work, but consider them beta until further testing.
 	function Events($unix_timestamp, $return = true) {
-		$request = $this->DoRequest('/audience_members/events_since/' . $unix_timestamp . '.xml?', $this->default_options(), $return);
+		$request = $this->DoRequest('/audience_members/events_since/' . $unix_timestamp . '.xml', $this->default_options(), $return);
 		return $request;
 	}
 	function Suppress($email, $return = false) {
-		$request = $this->DoRequest('/audience_members/' . $email . '/suppress_email?', $this->default_options(), $return, 'POST');
+		$request = $this->DoRequest('/audience_members/' . $email . '/suppress_email', $this->default_options(), $return, 'POST');
 	}
 }
 ?>
