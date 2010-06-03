@@ -44,7 +44,11 @@ class MadMimi {
 	}
 	function DoRequest($path, $options, $return_status = false, $method = 'GET', $mail = false) {
 		$url = "";
-		$request_options = "?";
+		if ($method == 'GET') {
+			$request_options = "?";
+		} else {
+			$request_options = "";
+		}
 		$request_options .= http_build_query($options);
 		if ($mail == false) {
 			$url .= "http://api.madmimi.com{$path}";
