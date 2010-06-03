@@ -86,10 +86,6 @@ class MadMimi {
 			return $result;
 		}
 	}
-	function to_yaml($arr) {
-		$yaml = Spyc::YAMLDump($arr);
-		return $yaml;
-	}
 	function build_csv($arr) {
 		$csv = "";
 		$keys = array_keys($arr);
@@ -139,9 +135,10 @@ class MadMimi {
 		return $request;
 	}
 	function SendMessage($options, $yaml_body, $return = false) {
-		$yaml = $this->to_yaml($yaml_body);
+		if (class_exists('Spyc')) {
+			$options['body'] = Spyc::YAMLDump($yaml_body);
+		}
 		$options = $options + $this->default_options();
-		$options['body'] = $yaml;
 		if ($options['list_name']) {
 			$request = $this->DoRequest('/mailer/to_list', $options, $return, 'POST', true);
 		} else {
