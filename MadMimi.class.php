@@ -195,7 +195,7 @@ class MadMimi {
 	}
 	# Note: these new functions should work, but consider them beta until further testing.
 	function Events($unix_timestamp, $return = true) {
-		$request = $this->DoRequest('/audience_members/events_since/' . $unix_timestamp . '.xml', $this->default_options(), $return);
+		$request = $this->DoRequest('/audience_members/events_since/' . $unix_timestamp . '.xml?', $this->default_options(), $return);
 		return $request;
 	}
 	function Suppress($email, $return = false) {
