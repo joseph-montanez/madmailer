@@ -106,7 +106,7 @@ class MadMimi {
 	}
 	function Import($csv_data, $return = false) {
 		$options = array('csv_file' => $csv_data) + $this->default_options();
-		$request = $this->DoRequest('/audience_members', $options, $return, 'POST');
+		$request = $this->DoRequest('/audience_members?', $options, $return, 'POST');
 		return $request;
 	}
 	function Lists($return = true) {
@@ -119,7 +119,7 @@ class MadMimi {
 	}
 	function RemoveUser($email, $list_name, $return = false) {
 		$options = array('email' => $email) + $this->default_options();
-		$request = $this->DoRequest('/audience_lists/' . rawurlencode($list_name) . "/remove", $options, $return, 'POST');
+		$request = $this->DoRequest('/audience_lists/' . rawurlencode($list_name) . "/remove?", $options, $return, 'POST');
 		return $request;
 	}
 	function Memberships($email, $return = true) {
@@ -129,12 +129,12 @@ class MadMimi {
 	}
 	function NewList($list_name, $return = false) {
 		$options = array('name' => $list_name) + $this->default_options();
-		$request = $this->DoRequest('/audience_lists', $options, $return, 'POST');
+		$request = $this->DoRequest('/audience_lists?', $options, $return, 'POST');
 		return $request;
 	}
 	function DeleteList($list_name, $return = false) {
 		$options = array('_method' => 'delete') + $this->default_options();
-		$request = $this->DoRequest('/audience_lists/' . rawurlencode($list_name), $options, $return, 'POST');
+		$request = $this->DoRequest('/audience_lists/' . rawurlencode($list_name) + '?', $options, $return, 'POST');
 		return $request;
 	}
 	function SendMessage($options, $yaml_body, $return = false) {
@@ -142,9 +142,9 @@ class MadMimi {
 		$options = $options + $this->default_options();
 		$options['body'] = $yaml;
 		if ($options['list_name']) {
-			$request = $this->DoRequest('/mailer/to_list', $options, $return, 'POST', true);
+			$request = $this->DoRequest('/mailer/to_list?', $options, $return, 'POST', true);
 		} else {
-			$request = $this->DoRequest('/mailer', $options, $return, 'POST', true);
+			$request = $this->DoRequest('/mailer?', $options, $return, 'POST', true);
 		}
 		return $request;
 	}
@@ -155,9 +155,9 @@ class MadMimi {
 		$options = $options + $this->default_options();
 		$options['raw_html'] = $html;
 		if ($options['list_name']) {
-			$request = $this->DoRequest('/mailer/to_list', $options, $return, 'POST', true);
+			$request = $this->DoRequest('/mailer/to_list?', $options, $return, 'POST', true);
 		} else {
-			$request = $this->DoRequest('/mailer', $options, $return, 'POST', true);
+			$request = $this->DoRequest('/mailer?', $options, $return, 'POST', true);
 		}
 		return $request;
 	}
@@ -168,9 +168,9 @@ class MadMimi {
 		$options = $options + $this->default_options();
 		$options['raw_plain_text'] = $message;
 		if ($options['list_name']) {
-			$request = $this->DoRequest('/mailer/to_list', $options, $return, 'POST', true);
+			$request = $this->DoRequest('/mailer/to_list?', $options, $return, 'POST', true);
 		} else {
-			$request = $this->DoRequest('/mailer', $options, $return, 'POST', true);
+			$request = $this->DoRequest('/mailer?', $options, $return, 'POST', true);
 		}
 		return $request;
 	}
@@ -199,7 +199,7 @@ class MadMimi {
 		return $request;
 	}
 	function Suppress($email, $return = false) {
-		$request = $this->DoRequest('/audience_members/' . $email . '/suppress_email', $this->default_options(), $return, 'POST');
+		$request = $this->DoRequest('/audience_members/' . $email . '/suppress_email?', $this->default_options(), $return, 'POST');
 	}
 }
 ?>
