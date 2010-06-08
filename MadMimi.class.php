@@ -7,7 +7,8 @@
 	
 	_______________________________________
 
-	Copyright (c) 2010 Nicholas Young <nicholas@madmimi.com>
+	Copyright (C) 2010 Mad Mimi LLC 
+	Authored by Nicholas Young <nicholas@madmimi.com> ...and a host of contributors.
 
 	Permission is hereby granted, free of charge, to any person obtaining a copy
 	of this software and associated documentation files (the "Software"), to deal
