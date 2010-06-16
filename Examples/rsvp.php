@@ -53,7 +53,7 @@ if ($params['setup']) {
 
 /* 
 	To confirm your RSVP (see below), it's just a GET request to 
-	rsvp.php?action=confirm&email=nicholas@madmimi.com 
+	rsvp.php?rsvp=yes&email=nicholas@madmimi.com 
 	(but replace with the recipient's email).
 */
 if ($params['rsvp'] == 'yes') {
