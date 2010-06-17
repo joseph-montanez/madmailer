@@ -15,5 +15,5 @@ gorilla3d
 lehresman
 
 ## License
-(C) 2010 Nicholas Young <nicholas@madmimi.com>
+(C) Copyright 2010 Mad Mimi LLC <nicholas@madmimi.com>
 Released under the MIT License.
