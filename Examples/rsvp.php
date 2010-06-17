@@ -58,7 +58,8 @@ if ($params['setup']) {
 */
 if ($params['rsvp'] == 'yes') {
 	$user = array('email' => $params['email'], 'add_list' => $lists['yes']);
-	$mimi->AddUser($user);
+
+	$mimi->AddUser($user); // I would actually consider doing requests like this in the background, unless real-time is essential.
 	// Feed this back out however you want. I'm just echoing for an example.
 	// (and it's the same for all instances below this, too.)
 	echo $messages[$params['rsvp']];
