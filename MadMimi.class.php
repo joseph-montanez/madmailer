@@ -200,5 +200,12 @@ class MadMimi {
 		$request = $this->DoRequest('/audience_members/events_since/' . $unix_timestamp . '.xml', $this->default_options(), $return);
 		return $request;
 	}
+	function Suppress($email, $return = false) {
+		$request = $this->DoRequest('/audience_members/' . $email . '/suppress_email', $this->default_options(), $return, 'POST');
+		return $request;
+	}
+	function Status($transaction_id, $return = true) {
+		$request = $this->DoRequest('/mailers/status/' . $transaction_id, $this->default_options(), $return);
+		return $request;
+	}
 }
-?>
