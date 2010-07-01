@@ -1,7 +1,7 @@
 <?php
 /*
 	Mad Mimi for PHP
-	v2.0 - Cleaner, faster, and much easier to use and extend. (In my opinion!)
+	v2.0.1 - Cleaner, faster, and much easier to use and extend. (In my opinion!)
 	
 	For release notes, see the README that should have been included.
 	
@@ -87,7 +87,7 @@ class MadMimi {
 			$result = curl_exec($ch) or die(curl_error($ch));
 		}
 		curl_close($ch);
-		if ($return_status == true && $this->debug == false) {
+		if ($this->debug == false) {
 			return $result;
 		}
 	}
@@ -111,7 +111,7 @@ class MadMimi {
 		$request = $this->DoRequest('/audience_members', $options, $return, 'POST');
 		return $request;
 	}
-	function Lists($return = true) {
+	function Lists($return = false) {
 		$request = $this->DoRequest('/audience_lists/lists.xml', $this->default_options(), $return);
 		return $request;
 	}
@@ -124,7 +124,7 @@ class MadMimi {
 		$request = $this->DoRequest('/audience_lists/' . rawurlencode($list_name) . "/remove", $options, $return, 'POST');
 		return $request;
 	}
-	function Memberships($email, $return = true) {
+	function Memberships($email, $return = false) {
 		$url = str_replace('%email%', $email, '/audience_members/%email%/lists.xml');
 		$request = $this->DoRequest($url, $this->default_options(), $return);
 		return $request;
@@ -144,7 +144,7 @@ class MadMimi {
 			$options['body'] = Spyc::YAMLDump($yaml_body);
 		}
 		$options = $options + $this->default_options();
-		if ($options['list_name']) {
+		if (isset($options['list_name'])) {
 			$request = $this->DoRequest('/mailer/to_list', $options, $return, 'POST', true);
 		} else {
 			$request = $this->DoRequest('/mailer', $options, $return, 'POST', true);
@@ -157,7 +157,7 @@ class MadMimi {
 		}
 		$options = $options + $this->default_options();
 		$options['raw_html'] = $html;
-		if ($options['list_name']) {
+		if (isset($options['list_name'])) {
 			$request = $this->DoRequest('/mailer/to_list', $options, $return, 'POST', true);
 		} else {
 			$request = $this->DoRequest('/mailer', $options, $return, 'POST', true);
@@ -170,18 +170,18 @@ class MadMimi {
 		}
 		$options = $options + $this->default_options();
 		$options['raw_plain_text'] = $message;
-		if ($options['list_name']) {
+		if (isset($options['list_name'])) {
 			$request = $this->DoRequest('/mailer/to_list', $options, $return, 'POST', true);
 		} else {
 			$request = $this->DoRequest('/mailer', $options, $return, 'POST', true);
 		}
 		return $request;
 	}
-	function SuppressedSince($unix_timestamp, $return = true) {
+	function SuppressedSince($unix_timestamp, $return = false) {
 		$request = $this->DoRequest('/audience_members/suppressed_since/' . $unix_timestamp . '.txt', $this->default_options(), $return);
 		return $request;
 	}
-	function Promotions($return = true) {
+	function Promotions($return = false) {
 		$request = $this->DoRequest('/promotions.xml', $this->default_options(), $return);
 		return $request;
 	}
@@ -191,16 +191,16 @@ class MadMimi {
 		$request = $this->DoRequest($url, $this->default_options(), $return);
 		return $request;
 	}
-	function Search($query_string, $raw = false, $return = true) {
+	function Search($query_string, $raw = false, $return = false) {
 		$options = array('query' => $query_string, 'raw' => $raw) + $this->default_options();
 		$request = $this->DoRequest('/audience_members/search.xml', $options, $return);
 		return $request;
 	}
-	function Events($unix_timestamp, $return = true) {
+	function Events($unix_timestamp, $return = false) {
 		$request = $this->DoRequest('/audience_members/events_since/' . $unix_timestamp . '.xml', $this->default_options(), $return);
 		return $request;
 	}
-	function Status($transaction_id, $return = true) {
+	function Status($transaction_id, $return = false) {
 		$request = $this->DoRequest('/mailers/status/' . $transaction_id, $this->default_options(), $return);
 		return $request;
 	}
