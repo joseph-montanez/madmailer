@@ -181,8 +181,9 @@ class MadMimi {
 		$request = $this->DoRequest('/audience_members/suppressed_since/' . $unix_timestamp . '.txt', $this->default_options(), $return);
 		return $request;
 	}
-	function Promotions($return = false) {
-		$request = $this->DoRequest('/promotions.xml', $this->default_options(), $return);
+	function Promotions($page = 1, $return = false) {
+		$options = array('page' => $page) + $this->default_options;
+		$request = $this->DoRequest('/promotions.xml', $options, $return);
 		return $request;
 	}
 	function MailingStats($promotion_id, $mailing_id, $return = false) {
