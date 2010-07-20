@@ -182,7 +182,7 @@ class MadMimi {
 		return $request;
 	}
 	function Promotions($page = 1, $return = false) {
-		$options = array('page' => $page) + $this->default_options;
+		$options = array('page' => $page) + $this->default_options();
 		$request = $this->DoRequest('/promotions.xml', $options, $return);
 		return $request;
 	}
@@ -203,6 +203,11 @@ class MadMimi {
 	}
 	function Status($transaction_id, $return = false) {
 		$request = $this->DoRequest('/mailers/status/' . $transaction_id, $this->default_options(), $return);
+		return $request;
+	}
+	function Suppress($email, $return = false) {
+		$path = str_replace('%email%', $email, '/audience_members/%email%/suppress_email');
+		$request = $this->DoRequest($path, $this->default_options(), $return, 'POST', false);
 		return $request;
 	}
 }
