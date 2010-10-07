@@ -91,15 +91,29 @@ class MadMimi {
 			return $result;
 		}
 	}
+	// This took years off my life. Seriously. -lkw
+	function escape_for_csv($s) {
+		// Watch out! We may have quotes! So quote them.
+		$s = str_replace('"', '""', $s);  
+		if(preg_match('/,/', $s) || preg_match('/"/', $s) || preg_match("/\n/", $s)) { 
+			// Quote the whole thing b/c we have a newline, comma or quote.
+			return '"'.$s.'"';   
+		} else {
+			// False alarm. We're good.
+			return $s; 
+		}
+	}
 	function build_csv($arr) {
 		$csv = "";
 		$keys = array_keys($arr);
 		foreach ($keys as $key => $value) {
+			$value = $this->escape_for_csv($value);
 			$csv .= $value . ",";
 		}
 		$csv = substr($csv, 0, -1);
 		$csv .= "\n";
 		foreach ($arr as $key => $value) {
+			$value = $this->escape_for_csv($value);			
 			$csv .= $value . ",";
 		}
 		$csv = substr($csv, 0, -1);
