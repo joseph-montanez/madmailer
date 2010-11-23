@@ -1,7 +1,7 @@
 <?php
 /*
 	Mad Mimi for PHP
-	v2.0.1 - Cleaner, faster, and much easier to use and extend. (In my opinion!)
+	v2.0.2 - Cleaner, faster, and much easier to use and extend. (In my opinion!)
 	
 	For release notes, see the README that should have been included.
 	
@@ -84,7 +84,12 @@ class MadMimi {
 				echo "Request Options: {$request_options}";
 			}
 		} else {
-			$result = curl_exec($ch) or die(curl_error($ch));
+			$result = curl_exec($ch);
+			if( $result === false){
+			  $error = curl_error($ch);
+		    echo 'Curl error: ', $error, "\n";
+  			die($error);
+			}
 		}
 		curl_close($ch);
 		if ($this->debug == false) {
