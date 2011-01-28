@@ -4,7 +4,7 @@ require(dirname(__FILE__) . '/../MadMimi.class.php');
 // There are a total of four arguments that can be used on the next line. The first two are shown here, the second two
 // are optional. The first of them is a debugger, which defaults to false, and the second, allows you to print
 // the transaction ID when sending a message. It also defaults to false.
-$mailer = new MadMimi('marc@madmimi.com', '0eee27d3f0260a9a6dca31608b3b83de'); 
+$mailer = new MadMimi('', ''); 
 
 // Create a list
 $mailer->NewList('My Awesome List');
