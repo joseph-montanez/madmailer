@@ -11,9 +11,8 @@ $mimi->Lists();
 
 ## Contributors
 gorilla3d
-
 lehresman
 
 ## License
-(C) Copyright 2010 Mad Mimi LLC <nicholas@madmimi.com>
+(C) Copyright 2010 Mad Mimi, LLC <support@madmimi.com>
 Released under the MIT License.

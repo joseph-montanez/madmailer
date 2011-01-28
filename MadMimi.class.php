@@ -229,4 +229,16 @@ class MadMimi {
 		$request = $this->DoRequest($path, $this->default_options(), $return, 'POST', false);
 		return $request;
 	}
+	function AddMembership($list_name, $email, $additional = array(), $return = false) {
+		$options = array('email' => $email) + $additional + $this->default_options();
+		$path = '/audience_lists/' . rawurlencode($list_name) . '/add';
+		$request = $this->DoRequest($path, $options, $return, 'POST', false);
+		return $request;
+	}
+	function RemoveMembership($list_name, $email, $return = false) {
+		$options = array('email' => $email) + $this->default_options();
+		$path = '/audience_lists/' . rawurlencode($list_name) . '/remove';
+		$request = $this->DoRequest($path, $options, $return, 'POST', false);
+		return $request;
+	}
 }
