@@ -1,7 +1,7 @@
 <?php
 /*
 	Mad Mimi for PHP
-	v2.0.2 - Cleaner, faster, and much easier to use and extend. (In my opinion!)
+	v2.0.3 - Cleaner, faster, and much easier to use and extend. (In my opinion!)
 	
 	For release notes, see the README that should have been included.
 	
@@ -44,7 +44,6 @@ class MadMimi {
 		return array('username' => $this->username, 'api_key' => $this->api_key);
 	}
 	function DoRequest($path, $options, $return_status = false, $method = 'GET', $mail = false) {
-		$url = "";
 		if ($method == 'GET') {
 			$request_options = "?";
 		} else {
@@ -52,15 +51,17 @@ class MadMimi {
 		}
 		$request_options .= http_build_query($options);
 		if ($mail == false) {
-			$url .= "http://api.madmimi.com{$path}";
+			$url = "http://api.madmimi.com{$path}";
 		} else {
-			$url .= "https://api.madmimi.com{$path}";
+			$url = "https://api.madmimi.com{$path}";
 		}
 		if ($method == 'GET') {
 			$url .= $request_options;
 		}
 		$ch = curl_init();
 		curl_setopt($ch, CURLOPT_URL, $url);
+		// Fix libcurl vs. apache2
+		curl_setopt($ch, CURLOPT_HTTPHEADER, array("Expect:"));
 		if ($return_status == true) {
 			curl_setopt($ch, CURLOPT_RETURNTRANSFER, false);
 		} else {
