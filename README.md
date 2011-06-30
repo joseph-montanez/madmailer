@@ -9,6 +9,8 @@ $mimi->Lists();
 
 ...and etc. For more detailed examples, see the Examples directory.
 
+General Mad Mimi API documentation can be found at the [Mad Mimi developer's wiki](http://madmimi.com/developer)
+
 ## Contributors
 gorilla3d
 lehresman
