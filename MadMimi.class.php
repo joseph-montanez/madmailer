@@ -236,7 +236,7 @@ class MadMimi {
 		return $request;
 	}
 	function Unsuppress($email, $return = false) {
-		$csv_data = "email, opt-out\n{$email}, 0";
+		$csv_data = "email,opt_out\n{$email},0";
 		return $this->Import($csv_data, $return);
 	}
 	function AddMembership($list_name, $email, $additional = array(), $return = false) {
